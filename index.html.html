@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitHome - Guia de Treino em Casa & Nutrição Acessível</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f1015',
+                        cardBg: '#181920',
+                        cardHover: '#20222c',
+                        cardBorder: '#2a2d3d',
+                        emeraldAccent: '#10b981',
+                        emeraldGlow: 'rgba(16, 185, 129, 0.15)',
+                        amberGold: '#f59e0b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f1015;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f1015;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a2d3d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+        .gradient-text-emerald {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-text-gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background: rgba(24, 25, 32, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(42, 45, 61, 0.8);
+        }
+        /* Meter gauge fill transitions */
+        .gauge-fill {
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-500 selection:text-white">
+
+    <!-- TOP HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-darkBg/90 backdrop-blur-md border-b border-cardBorder/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('profile')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-amber-500 flex items-center justify-center shadow-lg shadow-emerald-950/50">
+                        <i class="fa-solid font-bold text-lg text-white">🏋️</i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight text-white">Fit<span class="gradient-text-emerald">Home</span></span>
+                        <span class="block text-[10px] text-amber-400/90 font-medium tracking-wide uppercase">Hipertrofia & Nutrição Acessível</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Buttons -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all">
+                        <i class="fa-solid fa-calculator text-emerald-400"></i>
+                        <span>Perfil & Metas</span>
+                    </button>
+                    <button onclick="switchTab('workout')" id="nav-workout" class="nav-btn px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all">
+                        <i class="fa-solid fa-dumbbell text-amber-400"></i>
+                        <span>Ficha ABC</span>
+                    </button>
+                    <button onclick="switchTab('anatomy')" id="nav-anatomy" class="nav-btn px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all">
+                        <i class="fa-solid fa-brain text-purple-400"></i>
+                        <span>Guia Didático</span>
+                    </button>
+                    <button onclick="switchTab('nutrition')" id="nav-nutrition" class="nav-btn px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all">
+                        <i class="fa-solid fa-blender text-emerald-400"></i>
+                        <span>Hipercalórico & Dietas</span>
+                    </button>
+                    <button onclick="switchTab('dailyfood')" id="nav-dailyfood" class="nav-btn px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all">
+                        <i class="fa-solid fa-utensils text-emerald-400"></i>
+                        <span>Comida Acessível</span>
+                    </button>
+                    <button onclick="switchTab('progression')" id="nav-progression" class="nav-btn px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all">
+                        <i class="fa-solid fa-stopwatch text-amber-400"></i>
+                        <span>Progressão & Cadência</span>
+                    </button>
+                </nav>
+
+                <!-- Status Badge -->
+                <div class="hidden sm:flex items-center space-x-2 bg-cardBg px-3 py-1.5 rounded-full border border-cardBorder text-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-slate-300 font-medium" id="quick-status-text">Halteres: 4kg & 5kg</span>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="p-2 rounded-lg bg-cardBg border border-cardBorder text-slate-300 hover:text-white">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-cardBorder bg-cardBg/95 px-4 pt-2 pb-4 space-y-2 text-sm">
+            <button onclick="switchTab('profile'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg bg-cardBg/50 hover:bg-cardBorder flex items-center space-x-3 text-slate-200">
+                <i class="fa-solid fa-calculator text-emerald-400 w-5"></i> <span>Perfil & Métricas</span>
+            </button>
+            <button onclick="switchTab('workout'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg bg-cardBg/50 hover:bg-cardBorder flex items-center space-x-3 text-slate-200">
+                <i class="fa-solid fa-dumbbell text-amber-400 w-5"></i> <span>Ficha de Treinos (ABC)</span>
+            </button>
+            <button onclick="switchTab('anatomy'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg bg-cardBg/50 hover:bg-cardBorder flex items-center space-x-3 text-slate-200">
+                <i class="fa-solid fa-brain text-purple-400 w-5"></i> <span>Guia Didático Anatômico</span>
+            </button>
+            <button onclick="switchTab('nutrition'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg bg-cardBg/50 hover:bg-cardBorder flex items-center space-x-3 text-slate-200">
+                <i class="fa-solid fa-blender text-emerald-400 w-5"></i> <span>Hipercalórico & Nutrição</span>
+            </button>
+            <button onclick="switchTab('dailyfood'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg bg-cardBg/50 hover:bg-cardBorder flex items-center space-x-3 text-slate-200">
+                <i class="fa-solid fa-utensils text-emerald-400 w-5"></i> <span>Comida Acessível do Dia a Dia</span>
+            </button>
+            <button onclick="switchTab('progression'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg bg-cardBg/50 hover:bg-cardBorder flex items-center space-x-3 text-slate-200">
+                <i class="fa-solid fa-stopwatch text-amber-400 w-5"></i> <span>Progressão & Cadência</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+
+        <!-- ================= TAB 1: PERFIL & MÉTRICAS ================= -->
+        <section id="tab-profile" class="tab-content space-y-6">
+            <!-- Banner Intro -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-cardBg via-cardHover to-cardBg p-6 sm:p-8 border border-cardBorder shadow-xl">
+                <div class="relative z-10 max-w-3xl space-y-3">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        ⚡ Otimização do Corpo em Casa
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                        Calculadora de Perfil & <span class="gradient-text-emerald">Superávit Calórico</span>
+                    </h1>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Para quem é magro ou quer construir músculos em casa, o treino é o estímulo e a nutrição é a matéria-prima. Informe seus dados para calcular a quantidade exata de proteínas e calorias necessárias.
+                    </p>
+                </div>
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Form Container -->
+                <div class="lg:col-span-5 glass-card p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center space-x-2 border-b border-cardBorder pb-3">
+                        <i class="fa-solid fa-user-gear text-emerald-400 text-lg"></i>
+                        <h2 class="text-base font-bold text-white">Seus Dados Corporais</h2>
+                    </div>
+
+                    <form id="profile-form" onsubmit="event.preventDefault(); calculateMetrics();" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Seu Nome / Apelido</label>
+                            <input type="text" id="input-name" value="Atleta em Casa" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors" required>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Idade (Anos)</label>
+                                <input type="number" id="input-age" value="22" min="12" max="90" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Sexo Biológico</label>
+                                <select id="input-gender" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                                    <option value="male" selected>Masculino</option>
+                                    <option value="female">Feminino</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Peso Atual (kg)</label>
+                                <input type="number" step="0.1" id="input-weight" value="65.0" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Altura (cm)</label>
+                                <input type="number" id="input-height" value="175" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Nível de Atividade Diária</label>
+                            <select id="input-activity" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                                <option value="1.2">Levemente Ativo (Estuda/Trabalha sentado + Treino ABC)</option>
+                                <option value="1.375" selected>Moderadamente Ativo (Caminhadas + Treino ABC em Casa)</option>
+                                <option value="1.55">Bastante Ativo (Trabalho em pé + Treino Intenso)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Meta de Ganho (Superávit)</label>
+                            <select id="input-surplus" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                                <option value="300">Superávit Limpo (+300 kcal/dia - Ganho seco)</option>
+                                <option value="450" selected>Superávit Moderado (+450 kcal/dia - Recomendado)</option>
+                                <option value="600">Superávit Agressivo (+600 kcal/dia - Magro estrito)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold rounded-xl text-sm shadow-lg shadow-emerald-950/40 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Calcular & Atualizar Plano</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Grid Container -->
+                <div class="lg:col-span-7 space-y-4">
+                    <!-- Cards de Resumo -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="bg-cardBg p-4 rounded-xl border border-cardBorder text-center space-y-1">
+                            <span class="text-[11px] font-semibold text-slate-400 block uppercase">IMC Atual</span>
+                            <span id="res-imc" class="text-xl font-black text-emerald-400">21.2</span>
+                            <span id="res-imc-status" class="text-[10px] text-slate-400 block">Peso Normal</span>
+                        </div>
+                        <div class="bg-cardBg p-4 rounded-xl border border-cardBorder text-center space-y-1">
+                            <span class="text-[11px] font-semibold text-slate-400 block uppercase">TMB (Basal)</span>
+                            <span id="res-tmb" class="text-xl font-black text-amber-400">1615</span>
+                            <span class="text-[10px] text-slate-400 block">kcal gastas dormindo</span>
+                        </div>
+                        <div class="bg-cardBg p-4 rounded-xl border border-cardBorder text-center space-y-1">
+                            <span class="text-[11px] font-semibold text-slate-400 block uppercase">GET (Manutenção)</span>
+                            <span id="res-get" class="text-xl font-black text-sky-400">2220</span>
+                            <span class="text-[10px] text-slate-400 block">kcal gastas no dia</span>
+                        </div>
+                        <div class="bg-cardBg p-4 rounded-xl border border-cardBorder text-center space-y-1 bg-gradient-to-b from-emerald-950/30 to-cardBg border-emerald-500/30">
+                            <span class="text-[11px] font-bold text-emerald-400 block uppercase">Meta Diária</span>
+                            <span id="res-target-cal" class="text-xl font-black text-emerald-300">2670</span>
+                            <span class="text-[10px] text-emerald-400/80 block font-medium">kcal para Crescer</span>
+                        </div>
+                    </div>
+
+                    <!-- Divisão de Macronutrientes -->
+                    <div class="glass-card p-6 rounded-2xl space-y-4">
+                        <div class="flex items-center justify-between border-b border-cardBorder pb-3">
+                            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-pie-chart text-amber-400"></i>
+                                <span>Meta de Macronutrientes Recomendados</span>
+                            </h3>
+                            <span class="text-xs text-slate-400">Baseado em 2.0g/kg de Proteína</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <!-- Proteína -->
+                            <div class="bg-darkBg p-4 rounded-xl border border-cardBorder space-y-2">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-bold text-emerald-400">🥩 Proteínas</span>
+                                    <span class="text-slate-400" id="res-prot-ratio">2.0 g/kg</span>
+                                </div>
+                                <div class="text-2xl font-extrabold text-white" id="res-prot-grams">130g</div>
+                                <div class="text-[11px] text-slate-400" id="res-prot-cal">520 kcal (20%)</div>
+                                <div class="w-full bg-cardBorder h-1.5 rounded-full overflow-hidden">
+                                    <div class="bg-emerald-500 h-full w-[20%]"></div>
+                                </div>
+                            </div>
+
+                            <!-- Carboidratos -->
+                            <div class="bg-darkBg p-4 rounded-xl border border-cardBorder space-y-2">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-bold text-amber-400">🌾 Carboidratos</span>
+                                    <span class="text-slate-400">Combustível</span>
+                                </div>
+                                <div class="text-2xl font-extrabold text-white" id="res-carb-grams">380g</div>
+                                <div class="text-[11px] text-slate-400" id="res-carb-cal">1520 kcal (57%)</div>
+                                <div class="w-full bg-cardBorder h-1.5 rounded-full overflow-hidden">
+                                    <div class="bg-amber-400 h-full w-[57%]"></div>
+                                </div>
+                            </div>
+
+                            <!-- Gorduras -->
+                            <div class="bg-darkBg p-4 rounded-xl border border-cardBorder space-y-2">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-bold text-sky-400">🥑 Gorduras Boas</span>
+                                    <span class="text-slate-400">Hormônios</span>
+                                </div>
+                                <div class="text-2xl font-extrabold text-white" id="res-fat-grams">70g</div>
+                                <div class="text-[11px] text-slate-400" id="res-fat-cal">630 kcal (23%)</div>
+                                <div class="w-full bg-cardBorder h-1.5 rounded-full overflow-hidden">
+                                    <div class="bg-sky-400 h-full w-[23%]"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hidratação -->
+                        <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-lg">
+                                    💧
+                                </div>
+                                <div>
+                                    <span class="text-xs font-bold text-white block">Meta Diária de Água</span>
+                                    <span class="text-[11px] text-slate-400">Crucial para carregar nutrientes e volume muscular</span>
+                                </div>
+                            </div>
+                            <span id="res-water" class="text-lg font-extrabold text-emerald-400">2.3 Litros/dia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 2: FICHA DE TREINO (ABC) ================= -->
+        <section id="tab-workout" class="tab-content hidden space-y-6">
+            <!-- Header do Treino -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 glass-card p-5 rounded-2xl">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+                        <span>Ficha de Treinos em Casa (Divisão ABC)</span>
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Adaptado para peso corporal, halteres de 4kg/5kg e caneleiras de peso.</p>
+                </div>
+
+                <!-- Sub-tabs A, B, C -->
+                <div class="flex bg-darkBg p-1 rounded-xl border border-cardBorder w-full sm:w-auto">
+                    <button onclick="switchSubWorkout('A')" id="subnav-A" class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-white bg-emerald-600 shadow">
+                        Treino A (Empurrar)
+                    </button>
+                    <button onclick="switchSubWorkout('B')" id="subnav-B" class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white">
+                        Treino B (Pernas/Core)
+                    </button>
+                    <button onclick="switchSubWorkout('C')" id="subnav-C" class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white">
+                        Treino C (Puxar/Bíceps)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Workout Progress Bar -->
+            <div class="bg-cardBg p-4 rounded-xl border border-cardBorder space-y-2">
+                <div class="flex justify-between items-center text-xs">
+                    <span id="workout-progress-title" class="font-bold text-emerald-400">Progresso do Treino A</span>
+                    <span id="workout-progress-percent" class="text-slate-300 font-semibold">0% Concluído</span>
+                </div>
+                <div class="w-full bg-darkBg h-2 rounded-full overflow-hidden border border-cardBorder">
+                    <div id="workout-progress-bar" class="bg-gradient-to-r from-emerald-500 to-amber-400 h-full w-0 transition-all duration-500"></div>
+                </div>
+            </div>
+
+            <!-- TABELA TREINO A -->
+            <div id="workout-section-A" class="workout-tab-pane space-y-4">
+                <div class="overflow-x-auto rounded-2xl border border-cardBorder glass-card">
+                    <table class="w-full text-left text-xs sm:text-sm">
+                        <thead class="bg-darkBg/90 text-slate-400 uppercase text-[11px] font-bold border-b border-cardBorder">
+                            <tr>
+                                <th class="p-3.5 text-center w-12">OK</th>
+                                <th class="p-3.5">Exercício</th>
+                                <th class="p-3.5">Séries x Reps</th>
+                                <th class="p-3.5 hidden md:table-cell">Carga Recomendada</th>
+                                <th class="p-3.5">Foco & Execução</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-cardBorder/60 text-slate-200">
+                            <!-- Exercício 1 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('A')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🤸‍♂️ 1. Flexão Declinada</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">4 x 10 a 12</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Pés no sofá/cadeira (Peso corporal)</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Peitoral Superior.</strong> Pés elevados, cadência lenta (3s na descida).
+                                </td>
+                            </tr>
+                            <!-- Exercício 2 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('A')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🧘‍♂️ 2. Flexão Tradicional / Punhos</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 10 a 12</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">No chão ou apoiado nos halteres</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Peitoral Médio/Geral.</strong> Mãos abertas na largura dos ombros.
+                                </td>
+                            </tr>
+                            <!-- Exercício 3 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('A')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🏋️‍♂️ 3. Desenvolvimento com Halteres</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 10 a 12</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Halteres de 4kg a 5kg</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Ombros (Anterior/Medial).</strong> Empurre acima da cabeça sem bater os halteres.
+                                </td>
+                            </tr>
+                            <!-- Exercício 4 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('A')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🦅 4. Elevação Lateral com Halteres</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 12 a 15</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Halteres de 4kg ou 5kg</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Ombros (Largura Lateral).</strong> Pausa de 1s no topo (ponto mais alto).
+                                </td>
+                            </tr>
+                            <!-- Exercício 5 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('A')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🪑 5. Tríceps Banco / Dip</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 10 a 12</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Cadeira/Sofá (+ Caneleira/Halter no colo)</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Tríceps.</strong> Controle a descida perto da cadeira, estenda no topo.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TABELA TREINO B -->
+            <div id="workout-section-B" class="workout-tab-pane hidden space-y-4">
+                <div class="overflow-x-auto rounded-2xl border border-cardBorder glass-card">
+                    <table class="w-full text-left text-xs sm:text-sm">
+                        <thead class="bg-darkBg/90 text-slate-400 uppercase text-[11px] font-bold border-b border-cardBorder">
+                            <tr>
+                                <th class="p-3.5 text-center w-12">OK</th>
+                                <th class="p-3.5">Exercício</th>
+                                <th class="p-3.5">Séries x Reps</th>
+                                <th class="p-3.5 hidden md:table-cell">Carga Recomendada</th>
+                                <th class="p-3.5">Foco & Execução</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-cardBorder/60 text-slate-200">
+                            <!-- Exercício 1 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('B')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🇧🇬 1. Agachamento Búlgaro</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">4 x 10 a 12 /perna</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Pé no sofá + Halteres ou Caneleiras</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Quadríceps & Glúteos.</strong> Mantenha o joelho alinhado e desça fundo.
+                                </td>
+                            </tr>
+                            <!-- Exercício 2 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('B')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🍑 2. Stiff com Halteres</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">4 x 12 a 15</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Halteres de 5kg + Caneleiras na canela</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Posterior de Coxa & Glúteos.</strong> Quadril para trás, coluna reta.
+                                </td>
+                            </tr>
+                            <!-- Exercício 3 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('B')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🥋 3. Agachamento Sumô com Pausa</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 12 a 15</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">1 ou 2 Halteres entre as pernas</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Adutores & Glúteos.</strong> Pernas afastadas, 2 segundos de pausa no fundo.
+                                </td>
+                            </tr>
+                            <!-- Exercício 4 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('B')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🪜 4. Panturrilha Unilateral em Degrau</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">4 x 12 a 15 /perna</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Degrau/Livro + Halter na mão</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Panturrilhas.</strong> Alongue bem no fundo, suba até o máximo.
+                                </td>
+                            </tr>
+                            <!-- Exercício 5 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('B')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🧱 5. Abdominal Infra + Supra</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 12 a 15 cada</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Caneleiras nos tornozelos (opcional)</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Parede Abdominal.</strong> Elevação de pernas (infra) + Encolhimento (supra).
+                                </td>
+                            </tr>
+                            <!-- Exercício 6 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('B')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🛡️ 6. Prancha Abdominal</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 45 a 60 seg</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Peso corporal</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Estabilidade do Core.</strong> Mantenha o corpo reto e abdômen travado.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TABELA TREINO C -->
+            <div id="workout-section-C" class="workout-tab-pane hidden space-y-4">
+                <div class="overflow-x-auto rounded-2xl border border-cardBorder glass-card">
+                    <table class="w-full text-left text-xs sm:text-sm">
+                        <thead class="bg-darkBg/90 text-slate-400 uppercase text-[11px] font-bold border-b border-cardBorder">
+                            <tr>
+                                <th class="p-3.5 text-center w-12">OK</th>
+                                <th class="p-3.5">Exercício</th>
+                                <th class="p-3.5">Séries x Reps</th>
+                                <th class="p-3.5 hidden md:table-cell">Carga Recomendada</th>
+                                <th class="p-3.5">Foco & Execução</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-cardBorder/60 text-slate-200">
+                            <!-- Exercício 1 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('C')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🚣‍♂️ 1. Remada Curvada com Halteres</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">4 x 12 a 15</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Halteres de 5kg (+ Caneleiras presas)</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Dorsal & Miolo das Costas.</strong> Tronco inclinado, puxe no umbigo.
+                                </td>
+                            </tr>
+                            <!-- Exercício 2 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('C')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🪚 2. Remada Unilateral / Serrote</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 12 a 15 /lado</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Halter de 5kg apoiado no sofá</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Grande Dorsal.</strong> Foco na amplitude máxima, sem girar o tronco.
+                                </td>
+                            </tr>
+                            <!-- Exercício 3 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('C')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🔄 3. Rosca Zottman</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 10 a 12</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Halteres de 4kg a 5kg</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Bíceps & Antebraço.</strong> Suba normal e gire as palmas para baixo na descida (4s).
+                                </td>
+                            </tr>
+                            <!-- Exercício 4 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('C')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🕷️ 4. Rosca Africana / Spider</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 10 a 12</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Inclinado para frente / apoio de braço</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Pico de Contração do Bíceps.</strong> Tensão contínua no topo.
+                                </td>
+                            </tr>
+                            <!-- Exercício 5 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('C')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🔨 5. Rosca Martelo com Halteres</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 10 a 12</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Halteres de 5kg</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Braquial & Antebraço.</strong> Pegada neutra (palmas viradas para dentro).
+                                </td>
+                            </tr>
+                            <!-- Exercício 6 -->
+                            <tr class="hover:bg-cardHover/50 transition-colors">
+                                <td class="p-3.5 text-center">
+                                    <input type="checkbox" onchange="updateWorkoutProgress('C')" class="w-4 h-4 rounded border-cardBorder text-emerald-500 focus:ring-0 bg-darkBg cursor-pointer">
+                                </td>
+                                <td class="p-3.5 font-bold text-white flex items-center space-x-2">
+                                    <span>🐕 6. Perdigueiro (Bird-Dog)</span>
+                                </td>
+                                <td class="p-3.5 font-semibold text-amber-400 whitespace-nowrap">3 x 10 a 12 /lado</td>
+                                <td class="p-3.5 hidden md:table-cell text-slate-300 text-xs">Peso corporal / Caneleiras leves</td>
+                                <td class="p-3.5 text-xs text-slate-300">
+                                    <strong class="text-emerald-400">Estabilidade Lombar.</strong> Estenda braço e perna oposta com controle.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 3: GUIA DIDÁTICO ANATÔMICO ================= -->
+        <section id="tab-anatomy" class="tab-content hidden space-y-6">
+            <!-- Header -->
+            <div class="glass-card p-6 rounded-2xl space-y-2">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                    🧠 Conexão Mente-Músculo em Casa
+                </span>
+                <h2 class="text-2xl font-bold text-white">Guia Anatômico & Biomecânica dos Exercícios</h2>
+                <p class="text-xs text-slate-300">
+                    Compreender qual porção muscular está sendo ativada permite direcionar a força de vontade e aplicar a tensão necessária mesmo utilizando halteres leves de 4kg a 5kg e o peso do próprio corpo.
+                </p>
+            </div>
+
+            <!-- Cards Anatômicos Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Peitoral -->
+                <div class="bg-cardBg rounded-2xl border border-cardBorder p-5 space-y-3 hover:border-emerald-500/40 transition-colors">
+                    <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">🫁</div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">Peitoral (Maior e Menor)</h3>
+                            <span class="text-[11px] text-emerald-400 font-medium">Porções: Superior, Médio e Inferior</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        A chave da hipertrofia no peito em casa é alterar o ângulo das mãos. A <strong>Flexão Declinada</strong> eleva os pés e joga a tensão para as fibras claviculares (peito superior).
+                    </p>
+                    <div class="bg-darkBg p-3 rounded-xl border border-cardBorder/60 space-y-1">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase block">Como maximizar com 4kg/5kg:</span>
+                        <p class="text-[11px] text-slate-300">Faça 3 segundos lentos na descida (fase excêntrica). Isso gera microrrupturas profundas sem precisar de supino pesado.</p>
+                    </div>
+                </div>
+
+                <!-- Ombros -->
+                <div class="bg-cardBg rounded-2xl border border-cardBorder p-5 space-y-3 hover:border-amber-500/40 transition-colors">
+                    <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">🛡️</div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">Deltoides (Ombros)</h3>
+                            <span class="text-[11px] text-amber-400 font-medium">Porções: Lateral, Anterior e Posterior</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        O deltoide lateral responde incrivelmente bem a vetores de braço estendido. A <strong>Elevação Lateral</strong> com 4kg/5kg é o peso perfeito para isolar a largura dos ombros sem roubar com o trapézio.
+                    </p>
+                    <div class="bg-darkBg p-3 rounded-xl border border-cardBorder/60 space-y-1">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase block">Dica de Execução:</span>
+                        <p class="text-[11px] text-slate-300">Segure 1 segundo no topo (ponto neutro) antes de descer devagar. Não jogue o quadril.</p>
+                    </div>
+                </div>
+
+                <!-- Dorsal/Costas -->
+                <div class="bg-cardBg rounded-2xl border border-cardBorder p-5 space-y-3 hover:border-sky-500/40 transition-colors">
+                    <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-xl">🦅</div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">Dorsal & Miolo das Costas</h3>
+                            <span class="text-[11px] text-sky-400 font-medium">Latíssimo, Romboides e Trapézio</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        A <strong>Remada Curvada</strong> e o <strong>Serrote</strong> focam em puxar os cotovelos em direção ao quadril, espremendo as escápulas no final da remada para dar densidade às costas.
+                    </p>
+                    <div class="bg-darkBg p-3 rounded-xl border border-cardBorder/60 space-y-1">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase block">Aumento de Carga em Casa:</span>
+                        <p class="text-[11px] text-slate-300">Passe as caneleiras de 4kg na alça do halter para somar 8kg-9kg em um único lado na remada serrote!</p>
+                    </div>
+                </div>
+
+                <!-- Bíceps -->
+                <div class="bg-cardBg rounded-2xl border border-cardBorder p-5 space-y-3 hover:border-purple-500/40 transition-colors">
+                    <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">💪</div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">Bíceps & Antebraço</h3>
+                            <span class="text-[11px] text-purple-400 font-medium">Cabeça Longa, Curta e Braquial</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        A <strong>Rosca Zottman</strong> combina a rotação supinada na subida com a pronada na descida, recrutando o bíceps e o braquiorradial (antebraço) na mesma repetição.
+                    </p>
+                    <div class="bg-darkBg p-3 rounded-xl border border-cardBorder/60 space-y-1">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase block">Volume Visual:</span>
+                        <p class="text-[11px] text-slate-300">A Rosca Martelo desenvolve o músculo braquial, "empurrando" o bíceps para cima e deixando o braço visivelmente mais grosso.</p>
+                    </div>
+                </div>
+
+                <!-- Quadríceps & Glúteos -->
+                <div class="bg-cardBg rounded-2xl border border-cardBorder p-5 space-y-3 hover:border-emerald-500/40 transition-colors">
+                    <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">🦵</div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">Quadríceps & Glúteos</h3>
+                            <span class="text-[11px] text-emerald-400 font-medium">Vasto Lateral, Medial e Glúteo Máximo</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        O <strong>Agachamento Búlgaro</strong> isola cada perna individualmente, dobrando a carga de trabalho do halter de 5kg e exigindo estabilização extrema dos glúteos.
+                    </p>
+                    <div class="bg-darkBg p-3 rounded-xl border border-cardBorder/60 space-y-1">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase block">Intensidade Máxima:</span>
+                        <p class="text-[11px] text-slate-300">Coloque as caneleiras de 4kg ou 5kg nos tornozelos e segure os halteres de 5kg nas mãos durante o Búlgaro.</p>
+                    </div>
+                </div>
+
+                <!-- Core -->
+                <div class="bg-cardBg rounded-2xl border border-cardBorder p-5 space-y-3 hover:border-rose-500/40 transition-colors">
+                    <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-xl">🧱</div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">Core & Parede Abdominal</h3>
+                            <span class="text-[11px] text-rose-400 font-medium">Reto Abdominal, Oblíquos e Transiverso</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        A combinação de <strong>Abdominal Infra (elevação de pernas)</strong> com <strong>Prancha Isométrica</strong> fortalece tanto a estética dos gomos quanto a cinta natural do abdômen.
+                    </p>
+                    <div class="bg-darkBg p-3 rounded-xl border border-cardBorder/60 space-y-1">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase block">Postura & Saúde:</span>
+                        <p class="text-[11px] text-slate-300">O exercício Perdigueiro (Bird-Dog) previne dores na lombar ao agachar e melhora a postura na vida diária.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 4: HIPERCALÓRICO & NUTRIÇÃO ================= -->
+        <section id="tab-nutrition" class="tab-content hidden space-y-6">
+            <!-- Header -->
+            <div class="glass-card p-6 rounded-2xl space-y-2">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    🍌 Nutrição Econômica para Quem É Magro
+                </span>
+                <h2 class="text-2xl font-bold text-white">Montador Interativo de Hipercalórico Caseiro</h2>
+                <p class="text-xs text-slate-300">
+                    Sem dinheiro para suplementos caros? Um hipercalórico caseiro com aveia, leite e banana fornece calorias de altíssima qualidade por uma fração do preço industrial.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Seletor de Ingredientes -->
+                <div class="lg:col-span-7 glass-card p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between border-b border-cardBorder pb-3">
+                        <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-blender text-emerald-400"></i>
+                            <span>Escolha os Ingredientes do seu Shake</span>
+                        </h3>
+                        <button onclick="loadPresetShake('monster')" class="text-xs text-amber-400 hover:underline">
+                            ⚡ Carregar Shake Anabólico Padrão
+                        </button>
+                    </div>
+
+                    <!-- Lista de Ingredientes com Sliders/Switches -->
+                    <div class="space-y-4 text-xs">
+                        <!-- Leite -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="font-bold text-white flex items-center space-x-2">
+                                    <span>🥛 Leite Integral</span>
+                                </label>
+                                <span class="text-emerald-400 font-semibold" id="val-leite">350 ml</span>
+                            </div>
+                            <input type="range" id="range-leite" min="0" max="600" step="50" value="350" oninput="updateShakeCalc()" class="w-full accent-emerald-500">
+                        </div>
+
+                        <!-- Aveia -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="font-bold text-white flex items-center space-x-2">
+                                    <span>🌾 Aveia em Flocos / Farinha</span>
+                                </label>
+                                <span class="text-amber-400 font-semibold" id="val-aveia">80 g</span>
+                            </div>
+                            <input type="range" id="range-aveia" min="0" max="200" step="10" value="80" oninput="updateShakeCalc()" class="w-full accent-amber-500">
+                        </div>
+
+                        <!-- Banana -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="font-bold text-white flex items-center space-x-2">
+                                    <span>🍌 Bananas Prata / Caturra</span>
+                                </label>
+                                <span class="text-yellow-400 font-semibold" id="val-banana">2 unidades</span>
+                            </div>
+                            <input type="range" id="range-banana" min="0" max="5" step="1" value="2" oninput="updateShakeCalc()" class="w-full accent-yellow-500">
+                        </div>
+
+                        <!-- Amendoim / Pasta -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="font-bold text-white flex items-center space-x-2">
+                                    <span>🥜 Amendoim Moído / Pasta</span>
+                                </label>
+                                <span class="text-amber-300 font-semibold" id="val-amendoim">30 g</span>
+                            </div>
+                            <input type="range" id="range-amendoim" min="0" max="100" step="10" value="30" oninput="updateShakeCalc()" class="w-full accent-amber-600">
+                        </div>
+
+                        <!-- Leite em Pó ou Neston/Mucilon -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="font-bold text-white flex items-center space-x-2">
+                                    <span>🥣 Leite em Pó / Neston / Mucilon</span>
+                                </label>
+                                <span class="text-sky-300 font-semibold" id="val-neston">30 g</span>
+                            </div>
+                            <input type="range" id="range-neston" min="0" max="100" step="10" value="30" oninput="updateShakeCalc()" class="w-full accent-sky-500">
+                        </div>
+
+                        <!-- Achocolatado / Nescau -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="font-bold text-white flex items-center space-x-2">
+                                    <span>🍫 Achocolatado (Nescau / Toddy)</span>
+                                </label>
+                                <span class="text-amber-500 font-semibold" id="val-nescau">20 g</span>
+                            </div>
+                            <input type="range" id="range-nescau" min="0" max="60" step="10" value="20" oninput="updateShakeCalc()" class="w-full accent-amber-700">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumo Nutricional do Shake -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-gradient-to-b from-cardHover to-cardBg p-6 rounded-2xl border border-emerald-500/30 space-y-4 shadow-xl">
+                        <div class="flex items-center justify-between border-b border-cardBorder pb-3">
+                            <h3 class="text-base font-bold text-white">Tabela Nutricional do Shake</h3>
+                            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-full font-bold">Porção Total</span>
+                        </div>
+
+                        <div class="text-center py-2 bg-darkBg/60 rounded-xl border border-cardBorder">
+                            <span class="text-xs text-slate-400 uppercase font-semibold block">Total de Calorias</span>
+                            <span id="shake-calories" class="text-3xl font-black text-emerald-400">920 kcal</span>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="bg-darkBg p-2.5 rounded-xl border border-cardBorder">
+                                <span class="text-[10px] text-slate-400 block">Proteínas</span>
+                                <span id="shake-prot" class="text-base font-bold text-emerald-400">32g</span>
+                            </div>
+                            <div class="bg-darkBg p-2.5 rounded-xl border border-cardBorder">
+                                <span class="text-[10px] text-slate-400 block">Carboidratos</span>
+                                <span id="shake-carb" class="text-base font-bold text-amber-400">135g</span>
+                            </div>
+                            <div class="bg-darkBg p-2.5 rounded-xl border border-cardBorder">
+                                <span class="text-[10px] text-slate-400 block">Gorduras</span>
+                                <span id="shake-fat" class="text-base font-bold text-sky-400">28g</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-950/40 p-3.5 rounded-xl border border-emerald-500/20 flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-slate-300 block font-bold">Custo Aprox. por Shake:</span>
+                                <span class="text-[11px] text-slate-400">Ingredientes econômicos de mercado</span>
+                            </div>
+                            <span id="shake-cost" class="text-lg font-extrabold text-amber-400">R$ 3,80</span>
+                        </div>
+
+                        <div class="text-xs text-slate-300 space-y-1 bg-darkBg/40 p-3 rounded-xl border border-cardBorder/50">
+                            <span class="font-bold text-amber-400 block">💡 Como e quando tomar:</span>
+                            <p>Tome metade do shake pela manhã e a outra metade no lanche da tarde ou pós-treino. É ideal para completar as calorias do dia sem pesar no estômago.</p>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Alimentos Baratos -->
+                    <div class="glass-card p-5 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-slate-400">Alimentos Proteicos e Econômicos</h4>
+                        <ul class="text-xs space-y-2 text-slate-300 divide-y divide-cardBorder/50">
+                            <li class="pt-2 flex justify-between"><span>🥚 Ovos Inteiros (3 un)</span> <strong class="text-emerald-400">18g Proteína (~R$ 2,00)</strong></li>
+                            <li class="pt-2 flex justify-between"><span>🍗 Peito de Frango (150g)</span> <strong class="text-emerald-400">35g Proteína (~R$ 3,50)</strong></li>
+                            <li class="pt-2 flex justify-between"><span>🥛 Leite Integral (400ml)</span> <strong class="text-emerald-400">13g Proteína (~R$ 2,20)</strong></li>
+                            <li class="pt-2 flex justify-between"><span>🍚 Arroz + Feijão (Prato cheio)</span> <strong class="text-emerald-400">12g Proteína (~R$ 2,50)</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 6: ALIMENTOS ACESSÍVEIS DO DIA A DIA ================= -->
+        <section id="tab-dailyfood" class="tab-content hidden space-y-6">
+            <!-- Banner Intro -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-cardBg via-cardHover to-cardBg p-6 sm:p-8 border border-cardBorder shadow-xl">
+                <div class="relative z-10 max-w-3xl space-y-3">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        🛒 Nutrição Acessível & Realidade Financeira Enxuta
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                        Alimentos Acessíveis do Dia a Dia para <span class="gradient-text-emerald">Ganho de Massa</span>
+                    </h2>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Você não precisa de suplementos caros ou dietas chiques para crescer. O segredo da hipertrofia está nos alimentos simples e tradicionais do Brasil: ovos, frango, leite, arroz, feijão, aveia e banana.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SIMULADOR DE DISPENSA / MONTADOR DE REFEIÇÕES -->
+            <div class="glass-card p-6 rounded-2xl space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-cardBorder pb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-basket-shopping text-emerald-400"></i>
+                            <span>Simulador de Dispensa: O que Você Tem em Casa Hoje?</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Marque as porções consumidas ou planejadas para calcular o total de proteínas e calorias do dia.</p>
+                    </div>
+                    <button onclick="resetPantry()" class="px-3 py-1.5 bg-darkBg hover:bg-cardBorder text-slate-300 text-xs font-bold rounded-lg border border-cardBorder transition-all">
+                        🔄 Resetar Seleções
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Seletor de Itens -->
+                    <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <!-- Item 1: Ovos -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder flex items-center justify-between space-x-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🥚</span>
+                                <div>
+                                    <span class="font-bold text-white block">Ovos Inteiros</span>
+                                    <span class="text-[11px] text-slate-400">6g prot / 75 kcal por un.</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changePantryQty('ovos', -1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">-</button>
+                                <span id="pantry-qty-ovos" class="font-bold text-emerald-400 w-6 text-center">4</span>
+                                <button onclick="changePantryQty('ovos', 1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Item 2: Frango -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder flex items-center justify-between space-x-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🍗</span>
+                                <div>
+                                    <span class="font-bold text-white block">Frango (Peito/Coxa desfiada)</span>
+                                    <span class="text-[11px] text-slate-400">Porções de 100g (~28g prot)</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changePantryQty('frango', -1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">-</button>
+                                <span id="pantry-qty-frango" class="font-bold text-emerald-400 w-6 text-center">2</span>
+                                <button onclick="changePantryQty('frango', 1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Item 3: Leite Integral -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder flex items-center justify-between space-x-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🥛</span>
+                                <div>
+                                    <span class="font-bold text-white block">Leite Integral (Copos de 200ml)</span>
+                                    <span class="text-[11px] text-slate-400">6.5g prot / 120 kcal por copo</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changePantryQty('leite', -1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">-</button>
+                                <span id="pantry-qty-leite" class="font-bold text-emerald-400 w-6 text-center">2</span>
+                                <button onclick="changePantryQty('leite', 1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Item 4: Arroz e Feijão -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder flex items-center justify-between space-x-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🍚</span>
+                                <div>
+                                    <span class="font-bold text-white block">Prato Arroz + Feijão</span>
+                                    <span class="text-[11px] text-slate-400">12g prot / 350 kcal por prato</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changePantryQty('arrozfeijao', -1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">-</button>
+                                <span id="pantry-qty-arrozfeijao" class="font-bold text-emerald-400 w-6 text-center">2</span>
+                                <button onclick="changePantryQty('arrozfeijao', 1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Item 5: Aveia em Flocos -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder flex items-center justify-between space-x-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🌾</span>
+                                <div>
+                                    <span class="font-bold text-white block">Aveia (Porção de 50g)</span>
+                                    <span class="text-[11px] text-slate-400">7g prot / 190 kcal por xícara</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changePantryQty('aveia', -1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">-</button>
+                                <span id="pantry-qty-aveia" class="font-bold text-emerald-400 w-6 text-center">2</span>
+                                <button onclick="changePantryQty('aveia', 1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Item 6: Bananas -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder flex items-center justify-between space-x-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🍌</span>
+                                <div>
+                                    <span class="font-bold text-white block">Bananas</span>
+                                    <span class="text-[11px] text-slate-400">1g prot / 90 kcal por unidade</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changePantryQty('banana', -1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">-</button>
+                                <span id="pantry-qty-banana" class="font-bold text-emerald-400 w-6 text-center">3</span>
+                                <button onclick="changePantryQty('banana', 1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Item 7: Pão Francês / Fôrma -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder flex items-center justify-between space-x-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🍞</span>
+                                <div>
+                                    <span class="font-bold text-white block">Pão Francês / Fôrma</span>
+                                    <span class="text-[11px] text-slate-400">4g prot / 140 kcal por unidade</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changePantryQty('pao', -1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">-</button>
+                                <span id="pantry-qty-pao" class="font-bold text-emerald-400 w-6 text-center">2</span>
+                                <button onclick="changePantryQty('pao', 1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Item 8: Amendoim / Pasta -->
+                        <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder flex items-center justify-between space-x-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🥜</span>
+                                <div>
+                                    <span class="font-bold text-white block">Amendoim / Pasta (30g)</span>
+                                    <span class="text-[11px] text-slate-400">7.5g prot / 175 kcal por porção</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changePantryQty('amendoim', -1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">-</button>
+                                <span id="pantry-qty-amendoim" class="font-bold text-emerald-400 w-6 text-center">1</span>
+                                <button onclick="changePantryQty('amendoim', 1)" class="w-7 h-7 rounded-lg bg-cardBg border border-cardBorder text-slate-200 font-bold hover:bg-cardBorder">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumo dos Totais Calculados -->
+                    <div class="lg:col-span-4 bg-gradient-to-b from-cardHover to-cardBg p-5 rounded-2xl border border-emerald-500/30 space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between border-b border-cardBorder pb-2">
+                                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Total Consumido no Dia</h4>
+                                <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">Dispensa Hoje</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 text-center">
+                                <div class="bg-darkBg p-3 rounded-xl border border-cardBorder">
+                                    <span class="text-[10px] text-slate-400 block uppercase font-medium">Proteínas</span>
+                                    <span id="pantry-total-prot" class="text-2xl font-black text-emerald-400">128g</span>
+                                </div>
+                                <div class="bg-darkBg p-3 rounded-xl border border-cardBorder">
+                                    <span class="text-[10px] text-slate-400 block uppercase font-medium">Calorias</span>
+                                    <span id="pantry-total-cal" class="text-2xl font-black text-amber-400">2480 kcal</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-darkBg p-3 rounded-xl border border-cardBorder space-y-1">
+                                <div class="flex justify-between text-[11px]">
+                                    <span class="text-slate-400">Custo Diário Estimado:</span>
+                                    <span id="pantry-total-cost" class="font-bold text-amber-400">R$ 13,80</span>
+                                </div>
+                                <div class="flex justify-between text-[11px]">
+                                    <span class="text-slate-400">Meta de Proteína Atingida:</span>
+                                    <span id="pantry-prot-percent" class="font-bold text-emerald-400">98%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-emerald-950/40 rounded-xl border border-emerald-500/20 text-xs text-slate-300 space-y-1">
+                            <span class="font-bold text-emerald-400 flex items-center space-x-1">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Excelente Combinação!</span>
+                            </span>
+                            <p class="text-[11px] text-slate-300">
+                                Com esses alimentos básicos, você garante todos os aminoácidos essenciais para a recuperação muscular sem precisar gastar dinheiro extra.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GUIA DE ALIMENTOS ECONÔMICOS DIVIDIDO POR CATEGORIAS -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-list-check text-amber-400"></i>
+                    <span>Tabela Didática de Alimentos Baratos por Categoria</span>
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Categoria 1: Proteínas Baratas -->
+                    <div class="bg-cardBg p-5 rounded-2xl border border-cardBorder space-y-3">
+                        <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                            <span class="text-2xl">🥚</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Proteínas de Baixo Custo</h4>
+                                <span class="text-[11px] text-emerald-400 font-medium">Essenciais para construir fibras musculares</span>
+                            </div>
+                        </div>
+                        <ul class="text-xs space-y-2.5 text-slate-300 divide-y divide-cardBorder/50">
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Ovos Caipiras / Brancos</strong>
+                                    <span class="text-[11px] text-slate-400">6g prot / 75 kcal por unidade</span>
+                                </div>
+                                <span class="text-emerald-400 font-bold bg-emerald-950/50 px-2 py-1 rounded-lg">~R$ 0,60/un</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Coxa e Sobrecoxa de Frango</strong>
+                                    <span class="text-[11px] text-slate-400">24g prot / 210 kcal (porção de 100g)</span>
+                                </div>
+                                <span class="text-emerald-400 font-bold bg-emerald-950/50 px-2 py-1 rounded-lg">~R$ 10,00/kg</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Peito de Frango Desfiado</strong>
+                                    <span class="text-[11px] text-slate-400">30g prot / 165 kcal (porção de 100g)</span>
+                                </div>
+                                <span class="text-emerald-400 font-bold bg-emerald-950/50 px-2 py-1 rounded-lg">~R$ 18,00/kg</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Leite Integral de Caixinha/Saco</strong>
+                                    <span class="text-[11px] text-slate-400">6.5g prot / 120 kcal (copo 200ml)</span>
+                                </div>
+                                <span class="text-emerald-400 font-bold bg-emerald-950/50 px-2 py-1 rounded-lg">~R$ 4,80/L</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Categoria 2: Carboidratos de Baixo Custo -->
+                    <div class="bg-cardBg p-5 rounded-2xl border border-cardBorder space-y-3">
+                        <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                            <span class="text-2xl">🌾</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Carboidratos Baratos de Alta Energia</h4>
+                                <span class="text-[11px] text-amber-400 font-medium">Combustível para treinar forte em casa</span>
+                            </div>
+                        </div>
+                        <ul class="text-xs space-y-2.5 text-slate-300 divide-y divide-cardBorder/50">
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Arroz + Feijão (Combinação Perfeita)</strong>
+                                    <span class="text-[11px] text-slate-400">12g prot / 350 kcal (prato tradicional)</span>
+                                </div>
+                                <span class="text-amber-400 font-bold bg-amber-950/50 px-2 py-1 rounded-lg">~R$ 2,50/prato</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Aveia em Flocos (A Granel)</strong>
+                                    <span class="text-[11px] text-slate-400">14g prot / 380 kcal (por 100g)</span>
+                                </div>
+                                <span class="text-amber-400 font-bold bg-amber-950/50 px-2 py-1 rounded-lg">~R$ 10,00/kg</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Batata Doce / Mandioca / Inhame</strong>
+                                    <span class="text-[11px] text-slate-400">2g prot / 120 kcal (porção de 150g)</span>
+                                </div>
+                                <span class="text-amber-400 font-bold bg-amber-950/50 px-2 py-1 rounded-lg">~R$ 4,50/kg</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Pão Francês / Fôrma</strong>
+                                    <span class="text-[11px] text-slate-400">4.5g prot / 140 kcal (unidade 50g)</span>
+                                </div>
+                                <span class="text-amber-400 font-bold bg-amber-950/50 px-2 py-1 rounded-lg">~R$ 0,70/un</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Categoria 3: Gorduras Boas Econômicas -->
+                    <div class="bg-cardBg p-5 rounded-2xl border border-cardBorder space-y-3">
+                        <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                            <span class="text-2xl">🥜</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Gorduras Boas & Calóricas</h4>
+                                <span class="text-[11px] text-sky-400 font-medium">Garantem a produção de hormônios como testosterona</span>
+                            </div>
+                        </div>
+                        <ul class="text-xs space-y-2.5 text-slate-300 divide-y divide-cardBorder/50">
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Amendoim Torrado sem Pele</strong>
+                                    <span class="text-[11px] text-slate-400">25g prot / 580 kcal (por 100g)</span>
+                                </div>
+                                <span class="text-sky-400 font-bold bg-sky-950/50 px-2 py-1 rounded-lg">~R$ 14,00/kg</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Pasta de Amendoim Caseira</strong>
+                                    <span class="text-[11px] text-slate-400">7.5g prot / 175 kcal (colher de sopa)</span>
+                                </div>
+                                <span class="text-sky-400 font-bold bg-sky-950/50 px-2 py-1 rounded-lg">R$ 0,50/porção</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Gema dos Ovos</strong>
+                                    <span class="text-[11px] text-slate-400">3g prot / 55 kcal / Colesterol bom</span>
+                                </div>
+                                <span class="text-sky-400 font-bold bg-sky-950/50 px-2 py-1 rounded-lg">Incluso no ovo</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Categoria 4: Frutas & Fibras -->
+                    <div class="bg-cardBg p-5 rounded-2xl border border-cardBorder space-y-3">
+                        <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                            <span class="text-2xl">🍌</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Frutas Econômicas do Cotidiano</h4>
+                                <span class="text-[11px] text-yellow-400 font-medium">Digestão, vitaminas e energia rápida</span>
+                            </div>
+                        </div>
+                        <ul class="text-xs space-y-2.5 text-slate-300 divide-y divide-cardBorder/50">
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Banana Prata / Caturra</strong>
+                                    <span class="text-[11px] text-slate-400">90 kcal por unidade / Rica em potássio</span>
+                                </div>
+                                <span class="text-yellow-400 font-bold bg-yellow-950/50 px-2 py-1 rounded-lg">~R$ 4,50/dúzia</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Maçã Nacional da Estação</strong>
+                                    <span class="text-[11px] text-slate-400">70 kcal / Fibras solúveis para o intestino</span>
+                                </div>
+                                <span class="text-yellow-400 font-bold bg-yellow-950/50 px-2 py-1 rounded-lg">~R$ 5,00/kg</span>
+                            </li>
+                            <li class="pt-2 flex justify-between items-start">
+                                <div>
+                                    <strong class="text-white block">Laranja Pera / Mamão Formosa</strong>
+                                    <span class="text-[11px] text-slate-400">Vitamina C e enzimas digestivas</span>
+                                </div>
+                                <span class="text-yellow-400 font-bold bg-yellow-950/50 px-2 py-1 rounded-lg">~R$ 3,50/kg</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARDÁPIO EXEMPLO DO DIA A DIA (ESTRUTURA COMPLETA DE 5 REFEIÇÕES) -->
+            <div class="glass-card p-6 rounded-2xl space-y-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-cardBorder pb-3">
+                    <div>
+                        <h3 class="text-base font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-utensils text-emerald-400"></i>
+                            <span>Exemplo de Cardápio Completo do Cotidiano (~R$ 13,50/dia)</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Estrutura real para bater 124g de proteína e 2.500 kcal diárias com facilidade.</p>
+                    </div>
+                    <span class="text-xs font-bold bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full">
+                        Total: ~2500 kcal | 124g Proteína
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs">
+                    <!-- Refeição 1 -->
+                    <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                        <span class="text-[10px] font-bold text-amber-400 block uppercase">1. Café da Manhã</span>
+                        <h4 class="font-bold text-white">Pão com Ovos Mexidos</h4>
+                        <ul class="text-[11px] text-slate-300 space-y-1">
+                            <li>• 2 Pães franceses ou fôrma</li>
+                            <li>• 3 Ovos inteiros na frigideira</li>
+                            <li>• 1 Copo de café com leite</li>
+                        </ul>
+                        <div class="pt-1 border-t border-cardBorder/60 text-[10px] text-emerald-400 font-bold">
+                            480 kcal | 26g Proteína
+                        </div>
+                    </div>
+
+                    <!-- Refeição 2 -->
+                    <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                        <span class="text-[10px] font-bold text-amber-400 block uppercase">2. Almoço</span>
+                        <h4 class="font-bold text-white">Prato Tradicional BR</h4>
+                        <ul class="text-[11px] text-slate-300 space-y-1">
+                            <li>• 2 Conchas de Arroz</li>
+                            <li>• 1 Concha caprichada de Feijão</li>
+                            <li>• 120g Coxa/Peito de frango</li>
+                            <li>• Salada simples (Repolho)</li>
+                        </ul>
+                        <div class="pt-1 border-t border-cardBorder/60 text-[10px] text-emerald-400 font-bold">
+                            650 kcal | 38g Proteína
+                        </div>
+                    </div>
+
+                    <!-- Refeição 3 -->
+                    <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                        <span class="text-[10px] font-bold text-amber-400 block uppercase">3. Lanche Pré/Pós Treino</span>
+                        <h4 class="font-bold text-white">Vitamina Anabólica</h4>
+                        <ul class="text-[11px] text-slate-300 space-y-1">
+                            <li>• 300ml de Leite integral</li>
+                            <li>• 2 Bananas maduras</li>
+                            <li>• 50g de Aveia em flocos</li>
+                            <li>• 1 Colher de amendoim</li>
+                        </ul>
+                        <div class="pt-1 border-t border-cardBorder/60 text-[10px] text-emerald-400 font-bold">
+                            550 kcal | 22g Proteína
+                        </div>
+                    </div>
+
+                    <!-- Refeição 4 -->
+                    <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                        <span class="text-[10px] font-bold text-amber-400 block uppercase">4. Jantar</span>
+                        <h4 class="font-bold text-white">Arroz, Feijão e Omelete</h4>
+                        <ul class="text-[11px] text-slate-300 space-y-1">
+                            <li>• 2 Conchas de Arroz</li>
+                            <li>• 1 Concha de Feijão</li>
+                            <li>• Omelete com 2 Ovos</li>
+                            <li>• 1 Fio de azeite/óleo</li>
+                        </ul>
+                        <div class="pt-1 border-t border-cardBorder/60 text-[10px] text-emerald-400 font-bold">
+                            570 kcal | 26g Proteína
+                        </div>
+                    </div>
+
+                    <!-- Refeição 5 -->
+                    <div class="bg-darkBg p-3.5 rounded-xl border border-cardBorder space-y-2">
+                        <span class="text-[10px] font-bold text-amber-400 block uppercase">5. Ceia</span>
+                        <h4 class="font-bold text-white">Mingau de Aveia Morno</h4>
+                        <ul class="text-[11px] text-slate-300 space-y-1">
+                            <li>• 200ml de Leite</li>
+                            <li>• 30g de Aveia</li>
+                            <li>• Canela em pó</li>
+                        </ul>
+                        <div class="pt-1 border-t border-cardBorder/60 text-[10px] text-emerald-400 font-bold">
+                            250 kcal | 12g Proteína
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DICAS PRÁTICAS DE ECONOMIA & RECEITA DE PASTA DE AMENDOIM -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dicas de Compra -->
+                <div class="bg-cardBg p-5 rounded-2xl border border-cardBorder space-y-3">
+                    <h4 class="text-sm font-bold text-white flex items-center space-x-2">
+                        <span>💡 Truques de Economia no Mercado e Feira</span>
+                    </h4>
+                    <ul class="text-xs text-slate-300 space-y-2">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-emerald-400 font-bold">1.</span>
+                            <span><strong>Cartela de 30 Ovos:</strong> Comprar a cartela fechada reduz o preço por ovo de R$ 0,80 para R$ 0,55 a R$ 0,60.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-emerald-400 font-bold">2.</span>
+                            <span><strong>Coxa e Sobrecoxa com osso:</strong> Custa quase metade do preço do peito de frango. Basta assar ou cozinhar na pressão e desfiar.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-emerald-400 font-bold">3.</span>
+                            <span><strong>Aveia a Granel:</strong> Lojas de produtos naturais vendem o kg da aveia por R$ 8 a 10, enquanto a de caixinha do mercado custa o dobro.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Receita Pasta de Amendoim Caseira -->
+                <div class="bg-cardBg p-5 rounded-2xl border border-cardBorder space-y-3">
+                    <h4 class="text-sm font-bold text-white flex items-center space-x-2">
+                        <span>🥜 Receita: Pasta de Amendoim Caseira em 10 min</span>
+                    </h4>
+                    <div class="text-xs text-slate-300 space-y-1.5">
+                        <p><strong>Ingredientes:</strong> 500g de amendoim torrado sem pele e sem sal + 1 pitada de sal.</p>
+                        <p><strong>Modo de Preparo:</strong> Coloque o amendoim no liquidificador ou processador e bata por 5 a 10 minutos. No começo vira uma farofa, mas com o próprio óleo do amendoim ele vira um creme bem lisinho!</p>
+                        <p class="text-amber-400 font-bold text-[11px] pt-1">Rendimento: 500g de pasta pura por apenas R$ 7,00 (no mercado custa R$ 22,00).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 5: PROGRESSÃO & CADÊNCIA ================= -->
+        <section id="tab-progression" class="tab-content hidden space-y-6">
+            <!-- Header -->
+            <div class="glass-card p-6 rounded-2xl space-y-2">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    ⚡ Sobrecarga Progressiva com Carga Fixa
+                </span>
+                <h2 class="text-2xl font-bold text-white">Como Fazer o Músculo Crescer com Halteres de 4kg e 5kg</h2>
+                <p class="text-xs text-slate-300">
+                    O músculo não sabe se você está usando um haltere de academia ou uma caneleira em casa. Ele apenas reconhece <strong>tensão mecânica</strong> e <strong>estresse metabólico</strong>.
+                </p>
+            </div>
+
+            <!-- Princípios da Progressão -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-cardBg p-5 rounded-2xl border border-cardBorder space-y-2">
+                    <div class="text-amber-400 text-2xl font-bold">1. Cadência Lenta (TUT)</div>
+                    <h3 class="text-sm font-bold text-white">Tempo Sob Tensão</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Desça o peso em 3 a 4 segundos lentos em cada repetição. Com o haltere de 5kg, isso gera o dobro de tensão na fibra muscular em comparação a mover o peso rápido.
+                    </p>
+                </div>
+
+                <div class="bg-cardBg p-5 rounded-2xl border border-cardBorder space-y-2">
+                    <div class="text-emerald-400 text-2xl font-bold">2. Pausa Isométrica</div>
+                    <h3 class="text-sm font-bold text-white">Pico de Contração</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        No ponto de maior esforço (ex: topo da elevação lateral ou fundo do agachamento sumô), trave o movimento por 1 a 2 segundos antes de retornar.
+                    </p>
+                </div>
+
+                <div class="bg-cardBg p-5 rounded-2xl border border-cardBorder space-y-2">
+                    <div class="text-sky-400 text-2xl font-bold">3. Combinação de Cargas</div>
+                    <h3 class="text-sm font-bold text-white">Unir Caneleiras & Mochila</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Prenda as caneleiras nos tornozelos para pernas, ou coloque os halteres e livros dentro de uma mochila resistente nas costas para aumentar o peso da flexão de braço.
+                    </p>
+                </div>
+            </div>
+
+            <!-- FERRAMENTA INTERATIVA: METRÔNOMO DE CADÊNCIA & TIMER DE DESCANSO -->
+            <div class="glass-card p-6 rounded-2xl space-y-6">
+                <div class="flex items-center space-x-3 border-b border-cardBorder pb-3">
+                    <i class="fa-solid fa-stopwatch text-amber-400 text-xl"></i>
+                    <div>
+                        <h3 class="text-base font-bold text-white">Assistente de Treino: Metrônomo de Cadência & Descanso</h3>
+                        <p class="text-xs text-slate-400">Treine no ritmo ideal de hipertrofia com o contador sonoro e visual.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Metrônomo de Cadência -->
+                    <div class="bg-darkBg p-5 rounded-xl border border-cardBorder space-y-4 text-center">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider block">Guia de Cadência (3s Descida / 1s Subida)</span>
+                        
+                        <div class="relative w-36 h-36 mx-auto flex items-center justify-center rounded-full border-4 border-cardBorder" id="cadence-circle">
+                            <span id="cadence-status-text" class="text-lg font-black text-white">PRONTO</span>
+                        </div>
+
+                        <div class="flex justify-center space-x-3">
+                            <button onclick="startCadence()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs shadow transition-all">
+                                ▶️ Iniciar Ritmo
+                            </button>
+                            <button onclick="stopCadence()" class="px-5 py-2.5 bg-cardBorder hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs transition-all">
+                                ⏹️ Parar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Timer de Descanso entre Séries -->
+                    <div class="bg-darkBg p-5 rounded-xl border border-cardBorder space-y-4 text-center">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider block">Timer de Descanso entre Séries</span>
+                        
+                        <div class="text-4xl font-black text-amber-400 py-4 font-mono" id="timer-display">
+                            01:00
+                        </div>
+
+                        <div class="flex justify-center space-x-2">
+                            <button onclick="setRestTimer(45)" class="px-3 py-1.5 bg-cardBg hover:bg-cardBorder text-xs text-slate-300 rounded-lg border border-cardBorder">45s</button>
+                            <button onclick="setRestTimer(60)" class="px-3 py-1.5 bg-cardBg hover:bg-cardBorder text-xs text-slate-300 rounded-lg border border-cardBorder">60s</button>
+                            <button onclick="setRestTimer(90)" class="px-3 py-1.5 bg-cardBg hover:bg-cardBorder text-xs text-slate-300 rounded-lg border border-cardBorder">90s</button>
+                        </div>
+
+                        <div class="flex justify-center space-x-3 pt-2">
+                            <button onclick="startRestTimer()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs shadow transition-all">
+                                ⏱️ Iniciar Descanso
+                            </button>
+                            <button onclick="resetRestTimer()" class="px-5 py-2.5 bg-cardBorder hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs transition-all">
+                                🔄 Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-cardBorder bg-darkBg py-6 mt-12 text-center text-xs text-slate-500 space-y-2">
+        <p>FitHome - Guia de Treino em Casa & Nutrição Acessível • Foco em Hipertrofia & Baixo Custo</p>
+        <p class="text-[11px] text-slate-600">Desenvolvido para máxima eficiência com peso corporal, halteres e caneleiras de peso.</p>
+    </footer>
+
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ================= APP STATE & STORAGE =================
+        let userMetrics = {
+            name: "Atleta em Casa",
+            age: 22,
+            gender: "male",
+            weight: 65.0,
+            height: 175,
+            activity: 1.375,
+            surplus: 450,
+            targetCalories: 2670
+        };
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedProfile();
+            calculateMetrics();
+            updateShakeCalc();
+            calculatePantry();
+            updateWorkoutProgress('A');
+            switchTab('profile');
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-cardBorder', 'text-white');
+                btn.classList.add('text-slate-400');
+            });
+
+            const targetTab = document.getElementById(`tab-${tabId}`);
+            if (targetTab) targetTab.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-cardBorder', 'text-white');
+                activeBtn.classList.remove('text-slate-400');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Sub-tabs Treino ABC
+        function switchSubWorkout(pane) {
+            document.querySelectorAll('.workout-tab-pane').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id^="subnav-"]').forEach(btn => {
+                btn.classList.remove('bg-emerald-600', 'text-white', 'shadow');
+                btn.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`workout-section-${pane}`).classList.remove('hidden');
+            const activeSub = document.getElementById(`subnav-${pane}`);
+            activeSub.classList.add('bg-emerald-600', 'text-white', 'shadow');
+            activeSub.classList.remove('text-slate-400');
+
+            updateWorkoutProgress(pane);
+        }
+
+        // ================= METRIC CALCULATOR =================
+        function calculateMetrics() {
+            const name = document.getElementById('input-name').value || "Atleta";
+            const age = parseInt(document.getElementById('input-age').value) || 20;
+            const gender = document.getElementById('input-gender').value;
+            const weight = parseFloat(document.getElementById('input-weight').value) || 60;
+            const height = parseInt(document.getElementById('input-height').value) || 170;
+            const activity = parseFloat(document.getElementById('input-activity').value);
+            const surplus = parseInt(document.getElementById('input-surplus').value);
+
+            // IMC
+            const heightM = height / 100;
+            const imc = (weight / (heightM * heightM)).toFixed(1);
+            let imcStatus = "Peso Normal";
+            if (imc < 18.5) imcStatus = "Abaixo do Peso";
+            else if (imc >= 25 && imc < 30) imcStatus = "Sobrepeso";
+            else if (imc >= 30) imcStatus = "Obesidade";
+
+            // TMB (Mifflin-St Jeor)
+            let tmb = (10 * weight) + (6.25 * height) - (5 * age);
+            if (gender === 'male') {
+                tmb += 5;
+            } else {
+                tmb -= 161;
+            }
+            tmb = Math.round(tmb);
+
+            // GET (TDEE)
+            const get = Math.round(tmb * activity);
+
+            // Meta Final
+            const targetCal = get + surplus;
+
+            // Macros
+            const protGrams = Math.round(weight * 2.0); // 2g/kg
+            const protCal = protGrams * 4;
+
+            const fatGrams = Math.round(weight * 1.0); // 1g/kg
+            const fatCal = fatGrams * 9;
+
+            const carbCal = Math.max(0, targetCal - (protCal + fatCal));
+            const carbGrams = Math.round(carbCal / 4);
+
+            const waterLitres = (weight * 0.035).toFixed(1);
+
+            // Update UI
+            document.getElementById('res-imc').innerText = imc;
+            document.getElementById('res-imc-status').innerText = imcStatus;
+            document.getElementById('res-tmb').innerText = tmb;
+            document.getElementById('res-get').innerText = get;
+            document.getElementById('res-target-cal').innerText = targetCal;
+
+            document.getElementById('res-prot-grams').innerText = `${protGrams}g`;
+            document.getElementById('res-prot-cal').innerText = `${protCal} kcal (${Math.round((protCal/targetCal)*100)}%)`;
+
+            document.getElementById('res-carb-grams').innerText = `${carbGrams}g`;
+            document.getElementById('res-carb-cal').innerText = `${carbCal} kcal (${Math.round((carbCal/targetCal)*100)}%)`;
+
+            document.getElementById('res-fat-grams').innerText = `${fatGrams}g`;
+            document.getElementById('res-fat-cal').innerText = `${fatCal} kcal (${Math.round((fatCal/targetCal)*100)}%)`;
+
+            document.getElementById('res-water').innerText = `${waterLitres} Litros/dia`;
+            document.getElementById('quick-status-text').innerText = `${name} • Meta: ${targetCal} kcal`;
+
+            // Save state
+            userMetrics = { name, age, gender, weight, height, activity, surplus, targetCalories: targetCal };
+            localStorage.setItem('fithome_user_metrics', JSON.stringify(userMetrics));
+        }
+
+        function loadSavedProfile() {
+            const saved = localStorage.getItem('fithome_user_metrics');
+            if (saved) {
+                try {
+                    userMetrics = JSON.parse(saved);
+                    document.getElementById('input-name').value = userMetrics.name || "Atleta";
+                    document.getElementById('input-age').value = userMetrics.age || 22;
+                    document.getElementById('input-gender').value = userMetrics.gender || "male";
+                    document.getElementById('input-weight').value = userMetrics.weight || 65;
+                    document.getElementById('input-height').value = userMetrics.height || 175;
+                } catch(e) {}
+            }
+        }
+
+        // ================= WORKOUT PROGRESS =================
+        function updateWorkoutProgress(pane) {
+            const section = document.getElementById(`workout-section-${pane}`);
+            if (!section) return;
+
+            const checkboxes = section.querySelectorAll('input[type="checkbox"]');
+            const total = checkboxes.length;
+            let checked = 0;
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) checked++;
+            });
+
+            const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
+            document.getElementById('workout-progress-title').innerText = `Progresso do Treino ${pane}`;
+            document.getElementById('workout-progress-percent').innerText = `${percent}% Concluído (${checked}/${total})`;
+            document.getElementById('workout-progress-bar').style.width = `${percent}%`;
+        }
+
+        // ================= HIPERCALÓRICO CALCULATOR =================
+        function updateShakeCalc() {
+            const leite = parseInt(document.getElementById('range-leite').value);
+            const aveia = parseInt(document.getElementById('range-aveia').value);
+            const banana = parseInt(document.getElementById('range-banana').value);
+            const amendoim = parseInt(document.getElementById('range-amendoim').value);
+            const neston = parseInt(document.getElementById('range-neston').value);
+            const nescau = parseInt(document.getElementById('range-nescau').value);
+
+            document.getElementById('val-leite').innerText = `${leite} ml`;
+            document.getElementById('val-aveia').innerText = `${aveia} g`;
+            document.getElementById('val-banana').innerText = `${banana} un`;
+            document.getElementById('val-amendoim').innerText = `${amendoim} g`;
+            document.getElementById('val-neston').innerText = `${neston} g`;
+            document.getElementById('val-nescau').innerText = `${nescau} g`;
+
+            // Nutrients Calculation
+            // Leite Integral (100ml: 60kcal, 3g prot, 4.8g carb, 3.2g fat, R$ 0.60)
+            const leiteCal = (leite / 100) * 60;
+            const leiteProt = (leite / 100) * 3.2;
+            const leiteCarb = (leite / 100) * 4.8;
+            const leiteFat = (leite / 100) * 3.2;
+            const leiteCost = (leite / 1000) * 5.50;
+
+            // Aveia (100g: 380kcal, 14g prot, 60g carb, 7g fat, R$ 1.20)
+            const aveiaCal = (aveia / 100) * 380;
+            const aveiaProt = (aveia / 100) * 14;
+            const aveiaCarb = (aveia / 100) * 60;
+            const aveiaFat = (aveia / 100) * 7;
+            const aveiaCost = (aveia / 100) * 1.20;
+
+            // Banana (1un: 90kcal, 1g prot, 23g carb, 0g fat, R$ 0.50)
+            const bananaCal = banana * 90;
+            const bananaProt = banana * 1.1;
+            const bananaCarb = banana * 23;
+            const bananaFat = banana * 0.3;
+            const bananaCost = banana * 0.50;
+
+            // Amendoim (100g: 580kcal, 25g prot, 20g carb, 48g fat, R$ 2.00)
+            const amendoimCal = (amendoim / 100) * 580;
+            const amendoimProt = (amendoim / 100) * 25;
+            const amendoimCarb = (amendoim / 100) * 20;
+            const amendoimFat = (amendoim / 100) * 48;
+            const amendoimCost = (amendoim / 100) * 2.00;
+
+            // Neston (100g: 370kcal, 9g prot, 78g carb, 2g fat, R$ 2.50)
+            const nestonCal = (neston / 100) * 370;
+            const nestonProt = (neston / 100) * 9;
+            const nestonCarb = (neston / 100) * 78;
+            const nestonFat = (neston / 100) * 2;
+            const nestonCost = (neston / 100) * 2.50;
+
+            // Nescau (100g: 370kcal, 3.5g prot, 85g carb, 1.5g fat, R$ 2.00)
+            const nescauCal = (nescau / 100) * 370;
+            const nescauProt = (nescau / 100) * 3.5;
+            const nescauCarb = (nescau / 100) * 85;
+            const nescauFat = (nescau / 100) * 1.5;
+            const nescauCost = (nescau / 100) * 2.00;
+
+            const totalCal = Math.round(leiteCal + aveiaCal + bananaCal + amendoimCal + nestonCal + nescauCal);
+            const totalProt = Math.round(leiteProt + aveiaProt + bananaProt + amendoimProt + nestonProt + nescauProt);
+            const totalCarb = Math.round(leiteCarb + aveiaCarb + bananaCarb + amendoimCarb + nestonCarb + nescauCarb);
+            const totalFat = Math.round(leiteFat + aveiaFat + bananaFat + amendoimFat + nestonFat + nescauFat);
+            const totalCost = (leiteCost + aveiaCost + bananaCost + amendoimCost + nestonCost + nescauCost).toFixed(2);
+
+            document.getElementById('shake-calories').innerText = `${totalCal} kcal`;
+            document.getElementById('shake-prot').innerText = `${totalProt}g`;
+            document.getElementById('shake-carb').innerText = `${totalCarb}g`;
+            document.getElementById('shake-fat').innerText = `${totalFat}g`;
+            document.getElementById('shake-cost').innerText = `R$ ${totalCost.replace('.', ',')}`;
+        }
+
+        function loadPresetShake(preset) {
+            if (preset === 'monster') {
+                document.getElementById('range-leite').value = 400;
+                document.getElementById('range-aveia').value = 100;
+                document.getElementById('range-banana').value = 2;
+                document.getElementById('range-amendoim').value = 40;
+                document.getElementById('range-neston').value = 30;
+                document.getElementById('range-nescau').value = 20;
+                updateShakeCalc();
+            }
+        }
+
+        // ================= PANTRY SIMULATOR LOGIC =================
+        let pantryItems = {
+            ovos: 4,
+            frango: 2,
+            leite: 2,
+            arrozfeijao: 2,
+            aveia: 2,
+            banana: 3,
+            pao: 2,
+            amendoim: 1
+        };
+
+        const pantryNutrients = {
+            ovos: { prot: 6, cal: 75, cost: 0.60 },
+            frango: { prot: 28, cal: 175, cost: 1.80 },
+            leite: { prot: 6.5, cal: 120, cost: 1.00 },
+            arrozfeijao: { prot: 12, cal: 350, cost: 2.50 },
+            aveia: { prot: 7, cal: 190, cost: 0.50 },
+            banana: { prot: 1, cal: 90, cost: 0.40 },
+            pao: { prot: 4, cal: 140, cost: 0.70 },
+            amendoim: { prot: 7.5, cal: 175, cost: 0.50 }
+        };
+
+        function changePantryQty(item, delta) {
+            if (!pantryItems.hasOwnProperty(item)) return;
+            pantryItems[item] = Math.max(0, pantryItems[item] + delta);
+            document.getElementById(`pantry-qty-${item}`).innerText = pantryItems[item];
+            calculatePantry();
+        }
+
+        function resetPantry() {
+            Object.keys(pantryItems).forEach(key => {
+                pantryItems[key] = 0;
+                const el = document.getElementById(`pantry-qty-${key}`);
+                if (el) el.innerText = '0';
+            });
+            calculatePantry();
+        }
+
+        function calculatePantry() {
+            let totalProt = 0;
+            let totalCal = 0;
+            let totalCost = 0;
+
+            Object.keys(pantryItems).forEach(key => {
+                const qty = pantryItems[key];
+                const info = pantryNutrients[key];
+                if (info && qty > 0) {
+                    totalProt += info.prot * qty;
+                    totalCal += info.cal * qty;
+                    totalCost += info.cost * qty;
+                }
+            });
+
+            const targetProt = (userMetrics && userMetrics.weight) ? Math.round(userMetrics.weight * 2.0) : 130;
+            const protPercent = Math.min(100, Math.round((totalProt / targetProt) * 100));
+
+            const protEl = document.getElementById('pantry-total-prot');
+            if (protEl) protEl.innerText = `${Math.round(totalProt)}g`;
+
+            const calEl = document.getElementById('pantry-total-cal');
+            if (calEl) calEl.innerText = `${Math.round(totalCal)} kcal`;
+
+            const costEl = document.getElementById('pantry-total-cost');
+            if (costEl) costEl.innerText = `R$ ${totalCost.toFixed(2).replace('.', ',')}`;
+
+            const percentEl = document.getElementById('pantry-prot-percent');
+            if (percentEl) percentEl.innerText = `${protPercent}%`;
+        }
+
+        // ================= CADENCE & REST TIMER (AUDIO SYNTHESIS) =================
+        let cadenceInterval = null;
+        let cadenceStep = 0;
+        let audioCtx = null;
+
+        function playBeep(freq = 440, type = 'sine', duration = 0.1) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function startCadence() {
+            stopCadence();
+            const textEl = document.getElementById('cadence-status-text');
+            const circle = document.getElementById('cadence-circle');
+            
+            cadenceStep = 0;
+            cadenceInterval = setInterval(() => {
+                cadenceStep++;
+                const phase = cadenceStep % 5; // 3s descida, 1s pausa, 1s subida
+
+                if (phase === 1 || phase === 2 || phase === 3) {
+                    textEl.innerText = `DESCENDO (${phase}s)`;
+                    textEl.className = "text-lg font-black text-amber-400";
+                    circle.style.borderColor = "#f59e0b";
+                    playBeep(350, 'sine', 0.08);
+                } else if (phase === 4) {
+                    textEl.innerText = "PAUSA 1s";
+                    textEl.className = "text-lg font-black text-rose-400";
+                    circle.style.borderColor = "#f43f5e";
+                    playBeep(450, 'sine', 0.1);
+                } else {
+                    textEl.innerText = "SUBINDO ⚡";
+                    textEl.className = "text-lg font-black text-emerald-400";
+                    circle.style.borderColor = "#10b981";
+                    playBeep(650, 'triangle', 0.15);
+                }
+            }, 1000);
+        }
+
+        function stopCadence() {
+            if (cadenceInterval) clearInterval(cadenceInterval);
+            const textEl = document.getElementById('cadence-status-text');
+            const circle = document.getElementById('cadence-circle');
+            if (textEl) {
+                textEl.innerText = "PRONTO";
+                textEl.className = "text-lg font-black text-white";
+                circle.style.borderColor = "#2a2d3d";
+            }
+        }
+
+        // Rest Timer
+        let restTime = 60;
+        let restTimerInterval = null;
+
+        function setRestTimer(seconds) {
+            restTime = seconds;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(restTime / 60);
+            const secs = restTime % 60;
+            document.getElementById('timer-display').innerText = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function startRestTimer() {
+            if (restTimerInterval) clearInterval(restTimerInterval);
+            restTimerInterval = setInterval(() => {
+                if (restTime > 0) {
+                    restTime--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(restTimerInterval);
+                    playBeep(880, 'square', 0.4);
+                    document.getElementById('timer-display').innerText = "FIM DO DESCANSO!";
+                }
+            }, 1000);
+        }
+
+        function resetRestTimer() {
+            if (restTimerInterval) clearInterval(restTimerInterval);
+            restTime = 60;
+            updateTimerDisplay();
+        }
+    </script>
+</body>
+</html>
